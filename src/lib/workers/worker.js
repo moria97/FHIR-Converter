@@ -39,12 +39,8 @@ function generateResult(msgContext, template, replacementDictionary = null) {
             jsonProcessor.Process(template(msgContext))
         ), replacementDictionary);
 
-    var coverage = hl7.parseCoverageReport(msgContext.msg);
-    var invalidAccess = hl7.parseInvalidAccess(msgContext.msg);
     var result = {
         'fhirResource': message,
-        'unusedSegments': coverage,
-        'invalidAccess': invalidAccess,
     };
 
     return result;
@@ -85,8 +81,7 @@ WorkerUtils.workerTaskProcessor((msg) => {
                         var msgObj = {};
                         try {
                             var b = Buffer.from(msg.messageBase64, 'base64');
-                            var s = b.toString();
-                            msgObj = hl7.parseHL7v2(s);
+                            msgObj = JSON.parse(b.toString());
                         }
                         catch (err) {
                             reject({ 'status': 400, 'resultMsg': errorMessage(errorCodes.BadRequest, `Unable to decode and parse HL7 v2 message. ${err.message}`) });
@@ -99,12 +94,8 @@ WorkerUtils.workerTaskProcessor((msg) => {
 
                         var context = { msg: msgObj };
                         if (templateString == null || templateString.length == 0) {
-                            var coverage = hl7.parseCoverageReport(context.msg);
-                            var invalidAccess = hl7.parseInvalidAccess(context.msg);
                             var result = {
-                                'fhirResource': JSON.parse(JSON.stringify(context.msg)),
-                                'unusedSegments': coverage,
-                                'invalidAccess': invalidAccess,
+                                'fhirResource': JSON.parse(JSON.stringify(context.msg))
                             };
 
                             fulfill({ 'status': 200, 'resultMsg': result });
@@ -137,7 +128,7 @@ WorkerUtils.workerTaskProcessor((msg) => {
 
                     var msgObject = {};
                     try {
-                        msgObject = hl7.parseHL7v2(messageContent);
+                        msgObject = JSON.parse(messageContent);
                     }
                     catch (err) {
                         reject({
