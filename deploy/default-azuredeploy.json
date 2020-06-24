@@ -112,7 +112,7 @@
                             "value": "true"
                         }
                     ],
-                    "linuxFxVersion": "[concat('DOCKER|', variables('registryName'), '/fhirconverter:2020-05-18')]",
+                    "linuxFxVersion": "[concat('DOCKER|', variables('registryName'), '/fhirconverter:1f9c0b7b11c2f7925096cece2b3d2254f527719f')]",
                     "appCommandLine": "./deploy/webapp.sh",
                     "alwaysOn": true
                 },
