@@ -23,10 +23,10 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
-	- name: get-npm-version
-  	  id: package-version
-  	  uses: martinbeentjes/npm-get-version-action@master
-    
+    - name: get-npm-version
+      id: package-version
+      uses: martinbeentjes/npm-get-version-action@master
+
     - name: Build the Docker image
       env:
         IMAGE_NAME: healthplatformregistry.azurecr.io/fhirconverter
